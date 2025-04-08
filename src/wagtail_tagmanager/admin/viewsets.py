@@ -1,8 +1,10 @@
-from wagtail.snippets.views.snippets import SnippetViewSet
-from wagtail.admin.panels import FieldPanel
 from django.db.models import Count
+from wagtail.admin.panels import FieldPanel
+from wagtail.snippets.views.snippets import SnippetViewSet
+
 from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.panels import TagActionsPanel
+
 
 class ManagedTagViewSet(SnippetViewSet):
     model = ManagedTag

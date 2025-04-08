@@ -1,12 +1,12 @@
-
-
-from wagtail.snippets.bulk_actions.snippet_bulk_action import SnippetBulkAction
-from wagtail import hooks
-from taggit.models import TaggedItem
-from wagtail_tagmanager.models import ManagedTag
-from wagtail_tagmanager.forms import MergeTagsForm
-from wagtail_tagmanager.utils import get_page_tagging_model
 from django.utils.translation import gettext_lazy as _
+from taggit.models import TaggedItem
+from wagtail import hooks
+from wagtail.snippets.bulk_actions.snippet_bulk_action import SnippetBulkAction
+
+from wagtail_tagmanager.forms import MergeTagsForm
+from wagtail_tagmanager.models import ManagedTag
+from wagtail_tagmanager.utils import get_page_tagging_model
+
 
 @hooks.register("register_bulk_action")
 class MergeTagsBulkAction(SnippetBulkAction):

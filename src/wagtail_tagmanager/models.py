@@ -1,9 +1,10 @@
-from wagtail_tagmanager.utils import get_page_tagging_model
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from taggit.models import Tag, TaggedItem
 from wagtail.models import Page
 
-from taggit.models import Tag, TaggedItem
+from wagtail_tagmanager.utils import get_page_tagging_model
+
 
 class ManagedTag(Tag):
     class Meta:

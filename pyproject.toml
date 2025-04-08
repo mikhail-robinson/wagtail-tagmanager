@@ -24,3 +24,56 @@ build-backend = "setuptools.build_meta"
 [project.urls]
 Homepage = "https://github.com/pypa/sampleproject"
 Issues = "https://github.com/pypa/sampleproject/issues"
+
+[tool.ruff]
+# Python 3.10.5
+target-version = "py310"
+
+exclude = ["migrations", ".venv", "node_modules", "dist"]
+
+[tool.ruff.lint.mccabe]
+# Flag errors (`C901`) whenever the complexity level exceeds 6.
+max-complexity = 6
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # pycodestyle warnings
+    "W",
+
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-comprehensions
+    "C",
+    # flake8-django
+    "DJ",
+    # flake8-bandit
+    "S",
+    # flake8-simplify
+    "SIM",
+
+    # isort
+    "I",
+    # McCabe complexity
+    "C901",
+]
+
+ignore = [
+    "E501",
+    "F405",	# undefined-local-with-import-star-usage
+    "W291", # Trailing whitespace -- mostly used in default values...
+    "S311",  # N/A Standard pseudo-random generators are not suitable for cryptographic purposes
+    "DJ012", # Django models method, fields, etc. order
+    "S113",  # requests without timeout
+    "B017", # the error: `assertRaises(Exception)` should be considered evil"
+    "S308", # Use of `mark_safe` may expose cross-site scripting vulnerabilities
+    "E722", # Do not use bare `except`
+]
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 88
