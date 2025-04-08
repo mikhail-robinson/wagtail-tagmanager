@@ -78,7 +78,7 @@ class ManageTaggedObjectsView(IndexView):
 
 
 class AddPagesToTagView(IndexView):
-    template_name = "wagtail_tagmanager/add_pages_to_tag.html"
+    template_name = "wagtail_tagmanager/templates/add_pages_to_tag.html"
     paginate_by = 15
 
     @cached_property
