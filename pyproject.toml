@@ -1,0 +1,26 @@
+[project]
+name = "wagtail-tagmanager"
+version = "0.1.0"
+description = "A Wagtail add-on for managing tag usage"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+authors = [{ name = "Mikhail Robinson" }]
+dependencies = [
+"wagtail>=5.2",
+"django>=4.2",
+"wagtail-modeladmin>=2.0.0"
+]
+
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = "https://github.com/pypa/sampleproject"
+Issues = "https://github.com/pypa/sampleproject/issues"

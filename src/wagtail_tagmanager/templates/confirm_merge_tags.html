@@ -1,0 +1,29 @@
+{% extends 'wagtailadmin/bulk_actions/confirmation/base.html' %}
+{% load i18n wagtailadmin_tags %}
+
+{% block titletag %}{% blocktranslate trimmed count counter=items|length %}Merge 1 tag{% plural %}Merge {{ counter }} tags{% endblocktranslate %}{% endblock %}
+
+{% block header %}
+	{% trans "Merge Tags" as merge_str %}
+	{% include "wagtailadmin/shared/header.html" with title=merge_str icon="tag" %}
+{% endblock header %}
+
+{% block items_with_access %}
+	{% if items %}
+		<p>{% trans "You are about to merge the following the tags:" %}</p>
+		<ul>
+			{% for item in items %}
+				<li>{{ item.item.name }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock items_with_access %}
+
+{% block form_section %}
+	<form method="post">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="button button-longrunning">{% trans "Merge" %}</button>
+		<a href="{{ index_url }}" class="button">{% trans "Cancel" %}</a>
+	</form>
+{% endblock form_section %}

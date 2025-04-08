@@ -1,0 +1,102 @@
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailadmin_tags i18n %}
+
+{% block content %}
+<div class="w-header">
+  <div class="w-header__container nice-padding w-flex w-flex-row w-items-center w-justify-between w-gap-4">
+
+    <div class="w-header__title w-mt-8 w-mb-8">
+      <h1 class="w-header__title__text">
+        {% blocktrans with tag_name=tag.name %}Add pages to tag: {{ tag_name }}{% endblocktrans %}
+      </h1>
+    </div>
+
+    <form method="get" class="w-flex w-gap-2 w-items-center w-mr-4">
+      <div class="w-field__input">
+        <svg class="icon icon-search w-field__icon" aria-hidden="true">
+          <use href="#icon-search"></use>
+        </svg>
+        <input
+          type="text"
+          name="q"
+          placeholder="{% trans 'Search pages by title' %}"
+          value="{{ request.GET.q }}"
+          id="id_q"
+          class="w-input"
+        />
+      </div>
+
+    </form>
+  </div>
+</div>
+
+  <div class="nice-padding">
+    {% if object_list %}
+      <form method="post">
+        {% csrf_token %}
+        <table class="listing">
+          <thead>
+            <tr>
+              <th class="select"><input type="checkbox" class="bulk-select-all" id="bulk-select-all"></th>
+              <th>{% trans "Title" %}</th>
+              <th>{% trans "Parent" %}</th>
+              <th>{% trans "Last Edited" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for page in object_list %}
+              <tr>
+                <td class="select">
+                  <input type="checkbox" name="selected_items" value="{{ page.pk }}" class="bulk-select-item">
+                </td>
+                <td><a href="{% url 'wagtailadmin_pages:edit' page.id %}">{{ page.title }}</a></td>
+                <td>{{ page.get_parent.title|default:"—" }}</td>
+                <td>{{ page.latest_revision_created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="bulk-actions">
+          <div class="bulk-actions__select">
+            <button type="submit" name="action" value="remove_tag" class="button">
+              {% trans "Add Tag to Selected Pages" %}
+            </button>
+          </div>
+        </div>
+
+        {% include "wagtailadmin/shared/pagination_nav.html" with items=page_obj %}
+      </form>
+    {% else %}
+      <p>{% trans "No pages are currently tagged with this tag." %}</p>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const selectAll = document.getElementById("bulk-select-all");
+      if (!selectAll) return;
+      selectAll.addEventListener("change", () => {
+        document.querySelectorAll(".bulk-select-item").forEach(cb => {
+          cb.checked = selectAll.checked;
+        });
+      });
+    });
+
+		document.addEventListener("DOMContentLoaded", () => {
+			const input = document.querySelector('#search-form input[name="q"]');
+			if (!input) return;
+
+			input.addEventListener("input", function () {
+				if (this.value.length >= 2) {
+					clearTimeout(this._timeout);
+					this._timeout = setTimeout(() => {
+						this.form.submit();
+					}, 400);
+				}
+			});
+		});
+  </script>
+{% endblock %}

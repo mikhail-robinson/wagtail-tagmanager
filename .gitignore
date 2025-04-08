@@ -1,0 +1,68 @@
+# Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Packaging
+build/
+dist/
+*.egg-info/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Test / Coverage
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+
+# Virtual environments
+.env/
+.venv/
+env/
+venv/
+
+# IDEs & editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+
+# System files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Optional: dotenv for secrets
+.env.local
+.env.dev
+.env.test
+.env.prod
+
+# Optional: Poetry
+poetry.lock
+
+# Node modules if using JS build pipeline
+node_modules/
+
+# Local dev artifacts
+*.sqlite3
+*.db
+*.log
+*.pot
+
+# Sphinx docs
+docs/_build/
+
+# Ruff stuff:
+.ruff_cache/
