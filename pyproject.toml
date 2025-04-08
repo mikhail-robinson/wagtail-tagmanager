@@ -22,8 +22,8 @@ requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project.urls]
-Homepage = "https://github.com/pypa/sampleproject"
-Issues = "https://github.com/pypa/sampleproject/issues"
+Homepage = "https://github.com/mikhail-robinson/wagtail-tagmanager"
+Issues = "https://github.com/mikhail-robinson/wagtail-tagmanager/issues"
 
 [tool.ruff]
 # Python 3.10.5
