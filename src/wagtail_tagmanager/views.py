@@ -12,7 +12,7 @@ from wagtail_tagmanager.utils import get_page_tagging_model
 
 
 class ManageTaggedObjectsView(IndexView):
-    template_name = "wagtail_tagmanager/templates/manage_tagged_objects.html"
+    template_name = "wagtail_tagmanager/manage_tagged_objects.html"
     page_title = "Pages using tag"
     paginate_by = 15
 
@@ -78,7 +78,7 @@ class ManageTaggedObjectsView(IndexView):
 
 
 class AddPagesToTagView(IndexView):
-    template_name = "wagtail_tagmanager/templates/add_pages_to_tag.html"
+    template_name = "wagtail_tagmanager/add_pages_to_tag.html"
     paginate_by = 15
 
     @cached_property

@@ -13,7 +13,7 @@ class MergeTagsBulkAction(SnippetBulkAction):
     display_name = _("Merge")
     aria_label = _("Merge selected tags")
     action_type = "merge_tags"
-    template_name = "wagtail_tagmanager/templates/confirm_merge_tags.html"
+    template_name = "wagtail_tagmanager/confirm_merge_tags.html"
     form_class = MergeTagsForm
     models = [ManagedTag]
 
