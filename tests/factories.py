@@ -1,11 +1,7 @@
-import io
-
 import wagtail_factories
 from django.contrib.contenttypes.models import ContentType
-from django.core.files.base import ContentFile
-from factory import LazyAttribute, LazyFunction, Sequence, SubFactory, lazy_attribute
+from factory import Sequence, SubFactory, lazy_attribute
 from factory.django import DjangoModelFactory
-from PIL import Image as PilImage
 from taggit.models import Tag, TaggedItem
 from wagtail.models import Page
 
@@ -49,17 +45,3 @@ class HomePageFactory(wagtail_factories.PageFactory):
     parent = None
     title = "Home Page"
     slug = "home-page"
-
-
-class CustomDocumentFactory(wagtail_factories.DocumentFactory):
-    file = LazyAttribute(lambda _: ContentFile(b"Fake file content", "test.txt"))
-
-
-def simple_image():
-    buffer = io.BytesIO()
-    PilImage.new("RGB", (10, 10)).save(buffer, format="JPEG")
-    return ContentFile(buffer.getvalue(), "image.jpg")
-
-
-class CustomImageFactory(wagtail_factories.ImageFactory):
-    file = LazyFunction(simple_image)
