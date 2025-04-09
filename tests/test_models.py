@@ -1,7 +1,12 @@
 from django.test import TestCase
-from wagtail_factories import DocumentFactory, ImageFactory
 
-from tests.factories import PageFactory, TagFactory, TaggedItemFactory
+from tests.factories import (
+    CustomDocumentFactory,
+    CustomImageFactory,
+    PageFactory,
+    TagFactory,
+    TaggedItemFactory,
+)
 from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.utils import get_page_tagging_model
 
@@ -24,8 +29,8 @@ class ManagedTagTestCase(TestCase):
     def test_managed_tag__returns_correct_list_of_tagged_objects(self):
         tag = TagFactory()
         page = PageFactory()
-        document = DocumentFactory()
-        image = ImageFactory()
+        document = CustomDocumentFactory()
+        image = CustomImageFactory()
 
         self.page_tag_model.objects.create(tag=tag, content_object=page)
         TaggedItemFactory(tag=tag, content_object=document)

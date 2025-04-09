@@ -1,3 +1,5 @@
+import tempfile
+
 SECRET_KEY = "testing"  # noqa: S105
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
@@ -55,3 +57,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 STATIC_URL = "/static/"
 
 WAGTAIL_TAGMANAGER_PAGE_TAG_MODEL = "testapp.TestPageTag"
+MEDIA_ROOT = tempfile.mkdtemp()
