@@ -1,4 +1,4 @@
-SECRET_KEY = "testing" #noqa: S105
+SECRET_KEY = "testing"  # noqa: S105
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.auth",
@@ -13,6 +13,7 @@ INSTALLED_APPS = [
     "wagtail.documents",
     "wagtail.images",
     "wagtail_tagmanager",
+    "tests.testapp",
 ]
 
 DATABASES = {
@@ -52,3 +53,5 @@ USE_TZ = True
 TIME_ZONE = "UTC"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 STATIC_URL = "/static/"
+
+WAGTAIL_TAGMANAGER_PAGE_TAG_MODEL = "testapp.TestPageTag"
