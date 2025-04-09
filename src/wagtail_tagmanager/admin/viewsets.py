@@ -1,5 +1,6 @@
 from django.db.models import Count
 from wagtail.admin.panels import FieldPanel
+from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
 
 from wagtail_tagmanager.models import ManagedTag
@@ -26,3 +27,6 @@ class ManagedTagViewSet(SnippetViewSet):
         return self.model.objects.annotate(
             object_count_number=Count("taggit_taggeditem_items", distinct=True)
         )
+
+
+register_snippet(ManagedTagViewSet)
