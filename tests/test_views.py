@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from tests.factories import HomePageFactory, TagFactory
+from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.utils import get_page_tagging_model
 
 
@@ -65,3 +66,67 @@ class ManageTaggedObjectsViewTests(TestCase):
 
         messages = list(get_messages(response.wsgi_request))
         self.assertTrue(any("Removed tag" in message.message for message in messages))
+
+
+class AddPagesToTagViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_superuser(
+            username="admin",
+            password="pass",  # noqa: S106
+            email="admin@example.com",
+        )
+        self.client.force_login(self.user)
+        self.page_tag_model = get_page_tagging_model()
+
+        self.tag = ManagedTag.objects.create(name="Test Tag")
+        self.page = HomePageFactory(title="Home Page")
+        self.other_page = HomePageFactory(title="Another Page")
+
+        self.page_tag_model.objects.create(tag=self.tag, content_object=self.page)
+
+    def test_view_excludes_already_tagged_pages(self):
+        url = reverse("wagtail_tagmanager_add_pages", args=[self.tag.pk])
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn("Another Page", content)
+        self.assertNotIn("Home Page", content)
+
+    def test_search_filters_results(self):
+        url = reverse("wagtail_tagmanager_add_pages", args=[self.tag.pk])
+        response = self.client.get(url, {"q": "another"})
+
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn("Another Page", content)
+        self.assertNotIn("Home Page", content)
+
+    def test_post_adds_tag_to_selected_pages(self):
+        url = reverse("wagtail_tagmanager_add_pages", args=[self.tag.pk])
+        response = self.client.post(
+            url,
+            {
+                "selected_items": [self.other_page.pk],
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            self.page_tag_model.objects.filter(
+                tag=self.tag, content_object=self.other_page
+            ).exists()
+        )
+
+    def test_success_message_after_adding_tag(self):
+        url = reverse("wagtail_tagmanager_add_pages", args=[self.tag.pk])
+        response = self.client.post(
+            url,
+            {
+                "selected_items": [self.other_page.pk],
+            },
+            follow=True,
+        )
+
+        messages = list(get_messages(response.wsgi_request))
+        self.assertTrue(any("added to" in message.message for message in messages))
