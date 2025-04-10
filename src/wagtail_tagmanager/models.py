@@ -46,7 +46,16 @@ class ManagedTag(Tag):
             "content_type"
         )
 
-        others = [item.content_object for item in tagged_items if item.content_object]
+        others = []
+        for item in tagged_items:
+            model_class = item.content_type.model_class()
+            if model_class is not None:
+                try:
+                    obj = item.content_object
+                    if obj:
+                        others.append(obj)
+                except model_class.DoesNotExist:
+                    continue  # Object was deleted
 
         return list(pages) + others
 
