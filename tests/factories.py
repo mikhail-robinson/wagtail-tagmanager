@@ -2,13 +2,15 @@ import wagtail_factories
 from django.contrib.contenttypes.models import ContentType
 from factory import Sequence, SubFactory, lazy_attribute
 from factory.django import DjangoModelFactory
-from taggit.models import Tag, TaggedItem
+from taggit.models import TaggedItem
 from wagtail.models import Page
 
+from wagtail_tagmanager.models import ManagedTag
 
-class TagFactory(DjangoModelFactory):
+
+class ManagedTagFactory(DjangoModelFactory):
     class Meta:
-        model = Tag
+        model = ManagedTag
 
     name = Sequence(lambda n: f"Tag {n}")
 
@@ -26,7 +28,7 @@ class TaggedItemFactory(DjangoModelFactory):
     class Meta:
         model = TaggedItem
 
-    tag = SubFactory(TagFactory)
+    tag = SubFactory(ManagedTagFactory)
     content_object = SubFactory(wagtail_factories.DocumentFactory)
 
     @lazy_attribute

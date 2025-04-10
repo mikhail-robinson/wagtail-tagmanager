@@ -3,7 +3,7 @@ from django.contrib.messages.api import get_messages
 from django.test import TestCase
 from django.urls import reverse
 
-from tests.factories import HomePageFactory, TagFactory
+from tests.factories import HomePageFactory, ManagedTagFactory
 from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.utils import get_page_tagging_model
 
@@ -18,7 +18,7 @@ class ManageTaggedObjectsViewTests(TestCase):
         self.client.force_login(self.user)
         self.page_tag_model = get_page_tagging_model()
 
-        self.tag = TagFactory()
+        self.tag = ManagedTagFactory()
         self.page = HomePageFactory(title="Home Page")
         self.page_tag = self.page_tag_model.objects.create(
             tag=self.tag, content_object=self.page

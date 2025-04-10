@@ -3,8 +3,8 @@ from taggit.models import ContentType, TaggedItem
 from wagtail_factories import DocumentFactory, ImageFactory
 
 from tests.factories import (
+    ManagedTagFactory,
     PageFactory,
-    TagFactory,
     TaggedItemFactory,
 )
 from wagtail_tagmanager.models import ManagedTag
@@ -16,21 +16,39 @@ class ManagedTagTestCase(TestCase):
         self.page_tag_model = get_page_tagging_model()
 
     def test_managed_tag__returns_correct_get_tagged_object_count_number(self):
-        tag = TagFactory()
+        tag = ManagedTagFactory()
         page1 = PageFactory()
         page2 = PageFactory()
+        document = DocumentFactory(id=66)
+        image = ImageFactory(id=702)
 
         self.page_tag_model.objects.create(tag=tag, content_object=page1)
         self.page_tag_model.objects.create(tag=tag, content_object=page2)
+
+        ContentType.objects.create(app_label="fake_app", model="missingmodel")
+
+        # Should not be included in count
+        tagged_item_with_no_model_class = TaggedItem.objects.create(
+            tag=tag,
+            content_type=ContentType.objects.get(
+                app_label="fake_app", model="missingmodel"
+            ),
+            object_id=12345,
+        )
+        self.assertIsNone(tagged_item_with_no_model_class.content_type.model_class())
+
+        TaggedItemFactory(tag=tag, content_object=document)
+        TaggedItemFactory(tag=tag, content_object=image)
+
         managed_tag = ManagedTag.objects.get(pk=tag.pk)
 
-        self.assertEqual(managed_tag.get_tagged_object_count(), 2)
+        self.assertEqual(managed_tag.get_tagged_object_count(), 4)
 
     def test_managed_tag__returns_correct_list_of_tagged_objects(self):
-        tag = TagFactory()
+        tag = ManagedTagFactory()
         page = PageFactory()
-        document = DocumentFactory()
-        image = ImageFactory()
+        document = DocumentFactory(id=707)
+        image = ImageFactory(id=66)
 
         self.page_tag_model.objects.create(tag=tag, content_object=page)
         TaggedItemFactory(tag=tag, content_object=document)
