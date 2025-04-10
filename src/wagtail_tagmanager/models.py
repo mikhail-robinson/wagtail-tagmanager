@@ -1,6 +1,8 @@
+import logging
+
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-from taggit.models import Tag, TaggedItem
+from taggit.models import ContentType, Tag, TaggedItem
 from wagtail.models import Page
 
 from wagtail_tagmanager.utils import get_page_tagging_model
@@ -36,26 +38,31 @@ class ManagedTag(Tag):
     def get_tagged_objects(self):
         """
         Return a list of all objects (across models) that are tagged with this tag.
+        Only includes objects with valid model classes and existing instances.
         """
         page_ids = self.page_tag_model.objects.filter(tag=self).values_list(
             "content_object_id", flat=True
         )
+
         pages = Page.objects.filter(id__in=page_ids).specific()
 
-        tagged_items = TaggedItem.objects.filter(tag=self).select_related(
-            "content_type"
-        )
+        valid_content_types = {
+            ct.id: ct
+            for ct in ContentType.objects.all()
+            if ct.model_class() is not None
+        }
+        tagged_items = TaggedItem.objects.filter(
+            tag=self, content_type_id__in=valid_content_types.keys()
+        ).select_related("content_type")
 
         others = []
         for item in tagged_items:
-            model_class = item.content_type.model_class()
-            if model_class is not None:
-                try:
-                    obj = item.content_object
-                    if obj:
-                        others.append(obj)
-                except model_class.DoesNotExist:
-                    continue  # Object was deleted
+            try:
+                obj = item.content_object
+                if obj:
+                    others.append(obj)
+            except Exception:
+                logging.exception("Object is deleted/missing")
 
         return list(pages) + others
 
