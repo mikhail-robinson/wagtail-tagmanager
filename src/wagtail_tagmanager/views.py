@@ -9,6 +9,7 @@ from wagtail.models import Page
 
 from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.utils import get_page_tagging_model
+from wagtail_tagmanager.viewsets import ManagedTagViewSet
 
 
 class ManageTaggedObjectsView(IndexView):
@@ -64,6 +65,8 @@ class ManageTaggedObjectsView(IndexView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        viewset = ManagedTagViewSet()
+        context["edit_url"] = reverse(viewset.get_url_name("edit"), args=[self.tag.pk])
         context["tag"] = self.tag
         context["object_list"] = [
             {
