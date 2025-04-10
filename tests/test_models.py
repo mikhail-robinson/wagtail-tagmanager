@@ -1,4 +1,5 @@
 from django.test import TestCase
+from taggit.models import ContentType, TaggedItem
 from wagtail_factories import DocumentFactory, ImageFactory
 
 from tests.factories import (
@@ -35,10 +36,21 @@ class ManagedTagTestCase(TestCase):
         TaggedItemFactory(tag=tag, content_object=document)
         TaggedItemFactory(tag=tag, content_object=image)
 
+        ContentType.objects.create(app_label="fake_app", model="missingmodel")
+
+        # if a model is deleted, the model_class in the TaggedItem model is set to None
+        # which can impact how tagged objects results are collected.
+        tagged_item_with_no_model_class = TaggedItem.objects.create(
+            tag=tag,
+            content_type=ContentType.objects.get(
+                app_label="fake_app", model="missingmodel"
+            ),
+            object_id=12345,
+        )
+        self.assertIsNone(tagged_item_with_no_model_class.content_type.model_class())
+
         managed_tag = ManagedTag.objects.get(pk=tag.pk)
 
         result = managed_tag.get_tagged_objects()
-
         expected_objects = [page, document, image]
-
         self.assertEqual(result, expected_objects)
