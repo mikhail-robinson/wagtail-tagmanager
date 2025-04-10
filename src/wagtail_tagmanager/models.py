@@ -21,20 +21,6 @@ class ManagedTag(Tag):
     def object_count_number(self):
         return getattr(self, "object_count_number", 0)
 
-    def get_tagged_object_count(self):
-        page_count = (
-            self.page_tag_model.objects.filter(tag=self)
-            .values("content_object_id")
-            .distinct()
-            .count()
-        )
-
-        other_count = (
-            TaggedItem.objects.filter(tag=self).values("object_id").distinct().count()
-        )
-
-        return page_count + other_count
-
     def get_tagged_objects(self):
         """
         Return a list of all objects (across models) that are tagged with this tag.
@@ -65,6 +51,9 @@ class ManagedTag(Tag):
                 logging.exception("Object is deleted/missing")
 
         return list(pages) + others
+
+    def get_tagged_object_count(self):
+        return len(self.get_tagged_objects())
 
     get_tagged_object_count.admin_order_field = "object_count_number"
     get_tagged_object_count.short_description = "Objects Used On"
