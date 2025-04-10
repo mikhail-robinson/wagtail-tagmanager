@@ -1,1 +1,1 @@
-recursive-include src/wagtail_tagmanager/templates/*.html
+recursive-include src/wagtail_tagmanager/templates *.html
