@@ -18,6 +18,17 @@ class ManagedTag(Tag):
     def page_tag_model(self):
         return get_page_tagging_model()
 
+    def _get_valid_tagged_items(self):
+        valid_content_types = {
+            ct.id: ct
+            for ct in ContentType.objects.all()
+            if ct.model_class() is not None
+        }
+
+        return TaggedItem.objects.filter(
+            tag=self, content_type_id__in=valid_content_types.keys()
+        ).select_related("content_type")
+
     def object_count_number(self):
         return getattr(self, "object_count_number", 0)
 
@@ -29,20 +40,10 @@ class ManagedTag(Tag):
         page_ids = self.page_tag_model.objects.filter(tag=self).values_list(
             "content_object_id", flat=True
         )
-
         pages = Page.objects.filter(id__in=page_ids).specific()
 
-        valid_content_types = {
-            ct.id: ct
-            for ct in ContentType.objects.all()
-            if ct.model_class() is not None
-        }
-        tagged_items = TaggedItem.objects.filter(
-            tag=self, content_type_id__in=valid_content_types.keys()
-        ).select_related("content_type")
-
         others = []
-        for item in tagged_items:
+        for item in self._get_valid_tagged_items():
             try:
                 obj = item.content_object
                 if obj:
@@ -52,11 +53,7 @@ class ManagedTag(Tag):
 
         return list(pages) + others
 
-    def get_tagged_object_count(self):
-        return len(self.get_tagged_objects())
-
-    get_tagged_object_count.admin_order_field = "object_count_number"
-    get_tagged_object_count.short_description = "Objects Used On"
+    object_count_number.short_description = "Objects Used On"
 
     def __str__(self):
         return self.name
