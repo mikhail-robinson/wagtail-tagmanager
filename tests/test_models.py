@@ -9,6 +9,7 @@ from tests.factories import (
 )
 from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.utils import get_page_tagging_model
+from wagtail_tagmanager.viewsets import ManagedTagViewSet
 
 
 class ManagedTagTestCase(TestCase):
@@ -40,9 +41,10 @@ class ManagedTagTestCase(TestCase):
         TaggedItemFactory(tag=tag, content_object=document)
         TaggedItemFactory(tag=tag, content_object=image)
 
-        managed_tag = ManagedTag.objects.get(pk=tag.pk)
+        qs = ManagedTagViewSet().get_queryset(request=None)  # Mock or real request
+        managed_tag = qs.get(pk=tag.pk)
 
-        self.assertEqual(managed_tag.get_tagged_object_count(), 4)
+        self.assertEqual(managed_tag.object_count_number, 4)
 
     def test_managed_tag__returns_correct_list_of_tagged_objects(self):
         tag = ManagedTagFactory()
