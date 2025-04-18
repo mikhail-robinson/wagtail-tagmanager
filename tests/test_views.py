@@ -2,8 +2,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.messages.api import get_messages
 from django.test import TestCase
 from django.urls import reverse
+from taggit.models import TaggedItem
+from wagtail_factories import DocumentFactory
 
-from tests.factories import HomePageFactory, ManagedTagFactory
+from tests.factories import HomePageFactory, ManagedTagFactory, TaggedItemFactory
 from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.utils import get_page_tagging_model
 
@@ -36,22 +38,35 @@ class ManageTaggedObjectsViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "Magic Page")
 
-    def test_post_removes_tag_from_page(self):
+    def test_post_removes_tag_from_page_and_other_object(self):
+        document = DocumentFactory(id=66)
+        tagged_item = TaggedItemFactory(tag=self.tag, content_object=document)
+
+        # Confirm they exist before deletion
+        self.assertTrue(
+            get_page_tagging_model()
+            .objects.filter(tag=self.tag, content_object=self.page)
+            .exists()
+        )
+        self.assertTrue(TaggedItem.objects.filter(id=tagged_item.id).exists())
+
         url = reverse("wagtail_tagmanager_manage_objects", args=[self.tag.pk])
         response = self.client.post(
             url,
             {
                 "action": "remove_tag",
-                "selected_items": [self.page.pk],
+                "selected_items": [self.page.pk, document.pk],
             },
         )
 
         self.assertEqual(response.status_code, 302)
+
         self.assertFalse(
             get_page_tagging_model()
             .objects.filter(tag=self.tag, content_object=self.page)
             .exists()
         )
+        self.assertFalse(TaggedItem.objects.filter(id=tagged_item.id).exists())
 
     def test_success_message_after_removal(self):
         url = reverse("wagtail_tagmanager_manage_objects", args=[self.tag.pk])

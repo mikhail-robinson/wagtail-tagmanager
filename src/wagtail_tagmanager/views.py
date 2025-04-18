@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
+from taggit.models import TaggedItem
 from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.views.generic import IndexView
 from wagtail.models import Page
@@ -26,14 +27,21 @@ class ManageTaggedObjectsView(IndexView):
         if action == "remove_tag":
             selected_items = request.POST.getlist("selected_items")
             if selected_items:
-                page_ids = [int(page_id) for page_id in selected_items]
+                object_ids = [int(object_id) for object_id in selected_items]
+
+                # Remove from page tag model
                 self.page_tag_model.objects.filter(
-                    tag=self.tag, content_object_id__in=page_ids
+                    tag=self.tag, content_object_id__in=object_ids
+                ).delete()
+
+                # Remove from all other tagged items
+                TaggedItem.objects.filter(
+                    tag=self.tag, object_id__in=object_ids
                 ).delete()
 
                 messages.success(
                     request,
-                    f"Removed tag '{self.tag.name}' from {len(page_ids)} pages.",
+                    f"Removed tag '{self.tag.name}' from {len(object_ids)} pages.",
                 )
 
         return HttpResponseRedirect(request.get_full_path())
