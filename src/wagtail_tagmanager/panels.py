@@ -33,7 +33,7 @@ class TagActionsPanel(Panel):
             return mark_safe(f"""
                 <div class="field-content">
                     <a href="{url}" class="button button-secondary">
-                        View and remove tagged pages
+                        View and remove tagged objects
                     </a>
                 </div>
             """)
