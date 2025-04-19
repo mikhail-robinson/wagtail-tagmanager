@@ -8,3 +8,9 @@ class TestPageTag(TaggedItemBase):
     content_object = ParentalKey(
         Page, related_name="test_tagged_items", on_delete=models.CASCADE
     )
+
+class InvalidTagModel(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
