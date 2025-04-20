@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -7,9 +8,8 @@ from taggit.models import TaggedItem
 from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.views.generic import IndexView
 
-from tests.test_utils import get_base_page_model
 from wagtail_tagmanager.models import ManagedTag
-from wagtail_tagmanager.utils import get_page_tagging_model
+from wagtail_tagmanager.utils import get_base_page_model, get_page_tagging_model
 from wagtail_tagmanager.viewsets import ManagedTagViewSet
 
 
@@ -76,6 +76,9 @@ class ManageTaggedObjectsView(IndexView):
         viewset = ManagedTagViewSet()
         context["edit_url"] = reverse(viewset.get_url_name("edit"), args=[self.tag.pk])
         context["tag"] = self.tag
+        context["can_add_pages"] = bool(
+            getattr(settings, "WAGTAIL_TAGMANAGER_PAGE_TAG_MODEL", None)
+        )
         context["object_list"] = [
             {
                 "obj": obj,
