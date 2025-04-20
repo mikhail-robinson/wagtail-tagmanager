@@ -74,9 +74,12 @@
             <button type="submit" name="action" value="remove_tag" class="button">
               {% trans "Remove Tag from Selected Objects" %}
             </button>
-						<a href="{% url 'wagtail_tagmanager_add_pages' tag.id %}" class="button button-secondary">
-							{% trans "Add pages to this tag" %}
-						</a>
+
+            {% if can_add_pages %}
+              <a href="{% url 'wagtail_tagmanager_add_pages' tag.id %}" class="button button-secondary">
+                {% trans "Add pages to this tag" %}
+              </a>
+            {% endif %}
 						<a href="{{ edit_url }}" class="button button-secondary">
 							{% trans "Back to edit tag" %}
 						</a>
