@@ -68,7 +68,11 @@
         {% include "wagtailadmin/shared/pagination_nav.html" with items=page_obj %}
       </form>
     {% else %}
-      <p>{% trans "No pages are associated with the current Page type." %}</p>
+    <p>
+      {% blocktrans with tag_name=tag.name %}
+        All pages of this page type have been tagged with the tag "{{ tag_name }}."
+      {% endblocktrans %}
+    </p>
     {% endif %}
   </div>
 {% endblock %}
