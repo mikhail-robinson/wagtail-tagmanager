@@ -5,9 +5,17 @@ from wagtail.models import Page
 
 
 class TestPageTag(TaggedItemBase):
-    content_object = ParentalKey(
-        Page, related_name="test_tagged_items", on_delete=models.CASCADE
-    )
+    content_object = ParentalKey(Page, on_delete=models.CASCADE)
+
+
+class TestCustomPage(Page):
+    def __str__(self):
+        return self.title
+
+
+class CustomPageTag(TaggedItemBase):
+    content_object = ParentalKey(TestCustomPage, on_delete=models.CASCADE)
+
 
 class InvalidTagModel(models.Model):
     name = models.CharField(max_length=255)
