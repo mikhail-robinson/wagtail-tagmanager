@@ -77,7 +77,7 @@ class ManageTaggedObjectsView(IndexView):
         context["edit_url"] = reverse(viewset.get_url_name("edit"), args=[self.tag.pk])
         context["tag"] = self.tag
         context["can_add_pages"] = bool(
-            getattr(settings, "WAGTAIL_TAGMANAGER_PAGE_TAG_MODEL", None)
+            getattr(settings, "WAGTAIL_TAGMANAGER_BASE_PAGE_MODEL", None)
         )
         context["object_list"] = [
             {
