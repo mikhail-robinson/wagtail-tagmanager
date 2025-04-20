@@ -6,8 +6,8 @@ from django.utils.functional import cached_property
 from taggit.models import TaggedItem
 from wagtail.admin.admin_url_finder import AdminURLFinder
 from wagtail.admin.views.generic import IndexView
-from wagtail.models import Page
 
+from tests.test_utils import get_base_page_model
 from wagtail_tagmanager.models import ManagedTag
 from wagtail_tagmanager.utils import get_page_tagging_model
 from wagtail_tagmanager.viewsets import ManagedTagViewSet
@@ -96,6 +96,10 @@ class AddPagesToTagView(IndexView):
     def page_tag_model(self):
         return get_page_tagging_model()
 
+    @cached_property
+    def base_page_model(self):
+        return get_base_page_model()
+
     def dispatch(self, request, *args, **kwargs):
         self.tag = get_object_or_404(ManagedTag, id=self.kwargs["tag_id"])
         return super().dispatch(request, *args, **kwargs)
@@ -104,7 +108,11 @@ class AddPagesToTagView(IndexView):
         tagged_page_ids = self.page_tag_model.objects.filter(tag=self.tag).values_list(
             "content_object_id", flat=True
         )
-        pages = Page.objects.exclude(id__in=tagged_page_ids).live().specific()
+        pages = (
+            self.base_page_model.objects.exclude(id__in=tagged_page_ids)
+            .live()
+            .specific()
+        )
         search_query = self.request.GET.get("q", None)
 
         if search_query:
@@ -121,7 +129,7 @@ class AddPagesToTagView(IndexView):
         selected_items = request.POST.getlist("selected_items")
         if selected_items:
             page_ids = [int(i) for i in selected_items]
-            pages = Page.objects.filter(id__in=page_ids).specific()
+            pages = self.base_page_model.objects.filter(id__in=page_ids).specific()
 
             for page in pages:
                 self.page_tag_model.objects.get_or_create(
