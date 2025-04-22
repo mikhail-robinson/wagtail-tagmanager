@@ -116,11 +116,11 @@ If you would like to contribute, feel free to create a pull request. All changes
   cd wagtail-tagmanager
   pre-commit install
   ```
-  ### How to run tests
+  ### Tests
 
   ```bash
   cd wagtail-tagmanager
   python3 runtests.py
   ```
-
+Please make sure all tests pass before committing
 
