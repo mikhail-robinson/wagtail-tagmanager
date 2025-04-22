@@ -73,4 +73,15 @@ There are four main views:
 - Search for a specific page by title
 
 ![Add Pages to Tag View](images/add_pages_to_tag_view.png)
+
 ### Known Issues
+
+- The object count for each tag will count objects even if their model was deleted (since deleting a model does not delete it's corresponding `ContentType`). This can lead to incorrect object counts on the Tag Index Page. This `model` is defined in the `ContentType` model
+
+### Contributing
+
+If you would like to contribute, feel free to create a pull request. Some notes about contributing:
+  - You will need to create a virtual env and run `pip install -r requirements.txt`
+  - `pre-commit install` to install the formatting checker
+  - run `python3 runtests.py` to run the tests
+  - Please run `ruff format` and `ruff check --fix` to format your code before committing. If you forget, `pre-commit` will throw the error `Git: [WARNING] Unstaged files detected` when committing to remind you.
