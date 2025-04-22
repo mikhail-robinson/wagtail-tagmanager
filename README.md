@@ -1,7 +1,7 @@
 # Wagtail Tag Manager
-![PyPI](https://img.shields.io/pypi/v/wagtail-tagmanager.svg)
-![Python](https://img.shields.io/pypi/pyversions/wagtail-tagmanager.svg)
-![License](https://img.shields.io/pypi/l/wagtail-tagmanager.svg)
+![PyPI](https://img.shields.io/pypi/v/wagtail-tags.svg)
+![Python](https://img.shields.io/pypi/pyversions/wagtail-tags.svg)
+![License](https://img.shields.io/pypi/l/wagtail-tags.svg)
 ![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-brightgreen)
 
 **Wagtail Tag Manager** is an admin interface for managing tag usage across your Wagtail site:
@@ -27,7 +27,7 @@ While these are the officially supported versions, `wagtail-tagmanager` may work
 1. Install via pip:
 
     ```
-    pip install wagtail-tagmanager
+    pip install wagtail-tags
     ```
 
 2. Add to your `INSTALLED_APPS`:
