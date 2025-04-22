@@ -1,6 +1,6 @@
-from django.apps import apps
-from django.db.models import Count, F, IntegerField, OuterRef, Q, Subquery
-from django.db.models.functions import Coalesce
+from django.db.models import IntegerField
+from django.db.models.expressions import RawSQL
+from taggit.models import TaggedItem
 from wagtail.admin.panels import FieldPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.views.snippets import SnippetViewSet
@@ -31,34 +31,30 @@ class ManagedTagViewSet(SnippetViewSet):
     # that are not current. This avoids tags being counted for models that have been
     # deleted but their tag remains.
     # This query also combines the count of tags from the page model into the same count
-    def get_queryset(self, request):
+    def get_queryset(self, request):  # noqa S608, S611
         page_tag_model = get_page_tagging_model()
+        page_tag_table = page_tag_model._meta.db_table
+        tagged_item_table = TaggedItem._meta.db_table
+        tag_table = self.model._meta.db_table
 
-        # Count the custom page tags
-        page_tag_subquery = (
-            page_tag_model.objects.filter(tag=OuterRef("pk"))
-            .values("tag")
-            .annotate(count=Count("id"))
-            .values("count")
-        )
+        object_count_sql = f"""
+            SELECT COUNT(DISTINCT object_key) FROM (
+                SELECT CONCAT('page-', content_object_id) AS object_key
+                FROM {page_tag_table}
+                WHERE tag_id = {tag_table}.id
 
-        # Count the generic TaggedItems (with valid models)
-        valid_models = [
-            model.__name__.lower()
-            for app_config in apps.get_app_configs()
-            for model in app_config.get_models()
-        ]
+                UNION ALL
+
+                SELECT CONCAT(content_type_id, '-', object_id) AS object_key
+                FROM {tagged_item_table}
+                WHERE tag_id = {tag_table}.id
+            ) AS combined
+        """  # noqa S608
 
         return self.model.objects.annotate(
-            page_tag_count=Subquery(page_tag_subquery, output_field=IntegerField()),
-            tagged_item_count=Count(
-                "taggit_taggeditem_items",
-                filter=Q(taggit_taggeditem_items__content_type__model__in=valid_models),
-                distinct=True,
-            ),
-        ).annotate(
-            object_count_number=Coalesce(F("page_tag_count"), 0)
-            + F("tagged_item_count")
+            object_count_number=RawSQL(  # noqa S611
+                object_count_sql, [], output_field=IntegerField()
+            )
         )
 
 
