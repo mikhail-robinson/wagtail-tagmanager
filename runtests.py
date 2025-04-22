@@ -10,13 +10,10 @@ from django.test.utils import get_runner
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(BASE_DIR, "src"))
 
-# Set this first before doing anything Django-related
 os.environ["DJANGO_SETTINGS_MODULE"] = "wagtail_tagmanager.test_settings"
 
-# Then set up Django
 django.setup()
 
-# Now it's safe to run management commands
 call_command("makemigrations", "testapp")
 call_command("migrate")
 
