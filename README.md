@@ -87,7 +87,7 @@ There are four main views:
 
 ## Contributing
 
-If you would like to contribute, feel free to create a pull request.
+If you would like to contribute, feel free to create a pull request. All changes to main must go through a pull request and be reviewed. Direct pushes, merges without review, or force pushes are blocked by branch protection rules.
 
 ### Install
 
@@ -118,3 +118,5 @@ If you would like to contribute, feel free to create a pull request.
   cd wagtail-tagmanager
   python3 runtests.py
   ```
+
+
