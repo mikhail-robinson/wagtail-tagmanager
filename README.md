@@ -16,7 +16,7 @@
 - Django 4.2, 5.0, 5.1, 5.2
 - Wagtail 5.2, 6.1, 6.2, 6.3, 6.4
 
-While these are the officially supported versions, `wagtail-tagmanager` doesn’t rely on any cutting-edge features so it may work on older versions of Python, Django, or Wagtail. Feel free to try it out, but be aware that it may not work and issues on unsupported versions might not be prioritized.
+While these are the officially supported versions, `wagtail-tagmanager` may work on older versions of Python, Django, or Wagtail as it avoids reliance on newer features. Please note that issues on unsupported versions might not be prioritized.
 
 ## Installation
 
