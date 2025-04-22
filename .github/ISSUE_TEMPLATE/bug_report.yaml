@@ -1,0 +1,56 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting an issue.
+      options:
+        - label: I checked the documentation and found no answer
+        - label: I checked to make sure that this issue has not already been filed
+
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected Behaviour
+      description: Please describe the behaviour you are expecting.
+      placeholder: e.g., The tag manager should...
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behaviour
+    attributes:
+      label: Current Behaviour
+      description: What is the current behaviour?
+      placeholder: e.g., Currently it does...
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Please provide detailed steps to reproduce the issue.
+      placeholder: |
+        1. Do this
+        2. Then this
+        3. Then see the error
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Any relevant information about your setup.
+      placeholder: |
+        * Firmware Version:
+        * Operating System:
+        * Package versions (Django, Wagtail, etc):
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Failure Logs
+      description: Paste any relevant log output here.
+      render: shell

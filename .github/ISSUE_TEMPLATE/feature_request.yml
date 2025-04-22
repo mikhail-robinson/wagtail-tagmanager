@@ -1,0 +1,40 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Prerequisites
+      description: Please confirm the following before submitting a feature request.
+      options:
+        - label: I checked the documentation and found no answer to my request
+        - label: I checked to make sure that this feature has not already been requested
+
+  - type: textarea
+    id: feature-request
+    attributes:
+      label: Feature Request
+      description: Describe the feature you'd like to see.
+      placeholder: I’d like it if the tag manager could...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why do you think this feature is necessary? What problem does it solve?
+      placeholder: This would help with...
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Have you considered any alternative solutions or approaches?
+      placeholder: I tried...
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: Additional Information
+      description: Any other info that might help understand your request.
