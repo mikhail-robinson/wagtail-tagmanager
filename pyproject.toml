@@ -1,6 +1,6 @@
 [project]
 name = "wagtail-tagmanager"
-version = "0.1.0"
+version = "1.0.0"
 description = "A Wagtail add-on for managing tags"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -10,11 +10,17 @@ classifiers = [
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
-authors = [{ name = "Mikhail Robinson" }]
+authors = [
+{ name = "Mikhail Robinson" },
+{ name = "The Interaction Consortium"},
+]
+maintainers = [
+    { name = "Mikhail Robinson" },
+    { name = "The Interaction Consortium"},
+]
 dependencies = [
 "wagtail>=5.2",
 "django>=4.2",
-"wagtail-modeladmin>=2.0.0"
 ]
 
 [build-system]
