@@ -1,4 +1,8 @@
 # Wagtail Tag Manager
+![PyPI](https://img.shields.io/pypi/v/wagtail-tagmanager.svg)
+![Python](https://img.shields.io/pypi/pyversions/wagtail-tagmanager.svg)
+![License](https://img.shields.io/pypi/l/wagtail-tagmanager.svg)
+![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-brightgreen)
 
 **Wagtail Tag Manager** is an admin interface for managing tag usage across your Wagtail site:
 
